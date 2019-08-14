@@ -1,11 +1,13 @@
-import {generateID} from '../helpers/utils';
-import Base from './base';
-import SymbolInstance from './symbolInstance';
+import { generateID } from "../helpers/utils";
+import Base from "./base";
+import SymbolInstance from "./symbolInstance";
+
+let previousNumber = 1;
 
 class SymbolMaster extends Base {
-  constructor({x, y, width = null, height = null, id}) {
-    super({id});
-    this._class = 'symbolMaster';
+  constructor({ x, y, width = null, height = null, id }) {
+    super({ id });
+    this._class = "symbolMaster";
     this._x = x;
     this._y = y;
     this._width = width;
@@ -13,18 +15,34 @@ class SymbolMaster extends Base {
     this._symbolID = generateID();
   }
 
+  generateIdNumber() {
+    let date = Date.now();
+
+    if (date <= previousNumber) {
+      previousNumber += 1;
+    } else {
+      previousNumber = date;
+    }
+    return date;
+  }
   setId(id) {
     this._symbolID = id;
   }
 
-  getSymbolInstance({x, y, width = null, height = null}) {
+  getSymbolInstance({ x, y, width = null, height = null }) {
     // if no size will be requested, use the size of the master symbol
-    const {width: masterWidth, height: masterHeight} = this.getSize();
+    const { width: masterWidth, height: masterHeight } = this.getSize();
 
     width = width === null ? masterWidth : width;
     height = height === null ? masterHeight : height;
 
-    return new SymbolInstance({x, y, width, height, symbolID: this._symbolID});
+    return new SymbolInstance({
+      x,
+      y,
+      width,
+      height,
+      symbolID: this._symbolID
+    });
   }
 
   addLayer(layer) {
@@ -54,47 +72,47 @@ class SymbolMaster extends Base {
       });
     }
 
-    return {width, height};
+    return { width, height };
   }
 
   toJSON() {
     const obj = super.toJSON();
-    const {width, height} = this.getSize();
+    const { width, height } = this.getSize();
 
     obj.frame = {
-      '_class': 'rect',
-      'constrainProportions': false,
+      _class: "rect",
+      constrainProportions: false,
       width,
       height,
-      'x': this._x,
-      'y': this._y
+      x: this._x,
+      y: this._y
     };
 
     obj.style = {
-      '_class': 'style',
-      'endDecorationType': 0,
-      'miterLimit': 10,
-      'startDecorationType': 0
+      _class: "style",
+      endDecorationType: 0,
+      miterLimit: 10,
+      startDecorationType: 0
     };
 
     obj.horizontalRulerData = {
-      '_class': 'rulerData',
-      'base': 0,
-      'guides': []
+      _class: "rulerData",
+      base: 0,
+      guides: []
     };
 
     obj.verticalRulerData = {
-      '_class': 'rulerData',
-      'base': 0,
-      'guides': []
+      _class: "rulerData",
+      base: 0,
+      guides: []
     };
 
     obj.backgroundColor = {
-      '_class': 'color',
-      'alpha': 1,
-      'blue': 1,
-      'green': 1,
-      'red': 1
+      _class: "color",
+      alpha: 1,
+      blue: 1,
+      green: 1,
+      red: 1
     };
 
     obj.hasClickThrough = true;
@@ -104,7 +122,7 @@ class SymbolMaster extends Base {
     obj.resizesContent = false;
     obj.includeBackgroundColorInInstance = false;
     obj.symbolID = this._symbolID;
-    obj.changeIdentifier = 0;
+    obj.changeIdentifier = this.generateIdNumber();
 
     return obj;
   }
