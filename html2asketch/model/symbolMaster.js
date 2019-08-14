@@ -1,13 +1,13 @@
-import { generateID } from "../helpers/utils";
-import Base from "./base";
-import SymbolInstance from "./symbolInstance";
+import {generateID} from '../helpers/utils';
+import Base from './base';
+import SymbolInstance from './symbolInstance';
 
 let previousNumber = 1;
 
 class SymbolMaster extends Base {
-  constructor({ x, y, width = null, height = null, id }) {
-    super({ id });
-    this._class = "symbolMaster";
+  constructor({x, y, width = null, height = null, id}) {
+    super({id});
+    this._class = 'symbolMaster';
     this._x = x;
     this._y = y;
     this._width = width;
@@ -16,7 +16,7 @@ class SymbolMaster extends Base {
   }
 
   generateIdNumber() {
-    let date = Date.now();
+    const date = Date.now();
 
     if (date <= previousNumber) {
       previousNumber += 1;
@@ -29,9 +29,9 @@ class SymbolMaster extends Base {
     this._symbolID = id;
   }
 
-  getSymbolInstance({ x, y, width = null, height = null }) {
+  getSymbolInstance({x, y, width = null, height = null}) {
     // if no size will be requested, use the size of the master symbol
-    const { width: masterWidth, height: masterHeight } = this.getSize();
+    const {width: masterWidth, height: masterHeight} = this.getSize();
 
     width = width === null ? masterWidth : width;
     height = height === null ? masterHeight : height;
@@ -72,15 +72,15 @@ class SymbolMaster extends Base {
       });
     }
 
-    return { width, height };
+    return {width, height};
   }
 
   toJSON() {
     const obj = super.toJSON();
-    const { width, height } = this.getSize();
+    const {width, height} = this.getSize();
 
     obj.frame = {
-      _class: "rect",
+      _class: 'rect',
       constrainProportions: false,
       width,
       height,
@@ -89,26 +89,26 @@ class SymbolMaster extends Base {
     };
 
     obj.style = {
-      _class: "style",
+      _class: 'style',
       endDecorationType: 0,
       miterLimit: 10,
       startDecorationType: 0
     };
 
     obj.horizontalRulerData = {
-      _class: "rulerData",
+      _class: 'rulerData',
       base: 0,
       guides: []
     };
 
     obj.verticalRulerData = {
-      _class: "rulerData",
+      _class: 'rulerData',
       base: 0,
       guides: []
     };
 
     obj.backgroundColor = {
-      _class: "color",
+      _class: 'color',
       alpha: 1,
       blue: 1,
       green: 1,
